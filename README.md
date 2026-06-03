@@ -54,21 +54,3 @@ src/
 ├── exception/      # Custom exceptions
 └── ui/             # JavaFX panels and controllers
 ```
-
-## Setup
-
-1. Create a PostgreSQL database and run `schema.sql` to initialize the tables.
-2. Configure the connection details in `DatabaseConnection.java`.
-3. Build and run with Maven:
-
-```bash
-mvn javafx:run
-```
-
-## Audit Log
-
-Every operation (add car, place order, schedule test drive, etc.) is appended to `audit.csv` in the format:
-
-```
-action_name, timestamp
-```
