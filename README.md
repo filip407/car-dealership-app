@@ -1,4 +1,4 @@
-# Dealership Management System App
+# Car Dealership Application
 
 A Java desktop application for managing an Audi car dealership. Built as a university project for the Object-Oriented Programming II course (2026).
 
