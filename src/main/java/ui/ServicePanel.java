@@ -37,14 +37,28 @@ public class ServicePanel {
             protected void updateItem(ServiceAppointment sa, boolean empty) {
                 super.updateItem(sa, empty);
                 if (empty || sa == null) { setText(null); setGraphic(null); return; }
-                AudiCar car = service.getCarById(sa.getCarId());
-                String carName = car != null
-                        ? car.getModel() + " (" + sa.getCarId() + ")"
-                        : sa.getCarId();
+                String carName;
+                if (sa.getCarId() == null) {
+                    String desc = sa.getDescription() != null ? sa.getDescription() : "";
+                    int idx = desc.indexOf("Masina: ");
+                    if (idx >= 0) {
+                        String after = desc.substring(idx + 8);
+                        int pipe = after.indexOf(" | ");
+                        carName = pipe >= 0 ? after.substring(0, pipe) : after;
+                    } else {
+                        carName = "(cerere externa)";
+                    }
+                } else {
+                    AudiCar car = service.getCarById(sa.getCarId());
+                    carName = car != null
+                            ? car.getModel() + " (" + sa.getCarId() + ")"
+                            : sa.getCarId();
+                }
+                String mechanicDisplay = sa.getMechanicId() != null ? sa.getMechanicId() : "Neatribuit";
                 Label top = new Label(sa.getDate() + "   |   " + carName);
                 top.getStyleClass().add("cell-title");
                 Label bot = new Label("ID: " + sa.getAppointmentId()
-                        + "   |   Mecanic: " + sa.getMechanicId()
+                        + "   |   Mecanic: " + mechanicDisplay
                         + "   |   Status: " + sa.getStatus()
                         + (sa.getCost() > 0 ? "   |   Cost: " + String.format("%.0f RON", sa.getCost()) : ""));
                 bot.getStyleClass().add("cell-detail");

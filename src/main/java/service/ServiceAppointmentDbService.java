@@ -30,7 +30,12 @@ public class ServiceAppointmentDbService implements GenericDAO<ServiceAppointmen
         String sql = "INSERT INTO service_appointments (appointment_id, car_id, mechanic_id, appointment_date, description, cost, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = getConn().prepareStatement(sql)) {
             stmt.setString(1, appt.getAppointmentId());
-            stmt.setString(2, appt.getCarId());
+            String carId = appt.getCarId();
+            if (carId == null || carId.isEmpty()) {
+                stmt.setNull(2, Types.VARCHAR);
+            } else {
+                stmt.setString(2, carId);
+            }
             String mechId = appt.getMechanicId();
             if (mechId == null || mechId.isEmpty() || mechId.equals("N/A")) {
                 stmt.setNull(3, Types.VARCHAR);

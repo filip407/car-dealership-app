@@ -36,6 +36,9 @@ public class ServiceAppointment {
     @Override
     public String toString() {
         return String.format("[Service %s] Masina: %s | Mecanic: %s | Data: %s | Status: %s | Cost: %.0f RON",
-                appointmentId, carId, mechanicId, date, status, cost);
+                appointmentId,
+                carId != null ? carId : "(cerere externa)",
+                mechanicId != null ? mechanicId : "Neatribuit",
+                date, status, cost);
     }
 }

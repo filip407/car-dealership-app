@@ -294,7 +294,7 @@ public class CustomerPanel {
                 + " | Masina: " + tfSvcCar.getText().trim()
                 + (tfSvcDescription.getText().trim().isEmpty() ? "" : " | " + tfSvcDescription.getText().trim());
         ServiceAppointment appt = new ServiceAppointment(service.generateServiceAppointmentId(),
-                tfSvcCar.getText().trim(), "N/A", svcDatePicker.getValue().toString(), desc);
+                null, null, svcDatePicker.getValue().toString(), desc);
         service.addServiceAppointment(appt);
 
         showAlert(Alert.AlertType.INFORMATION, "Programare inregistrata",

@@ -65,12 +65,14 @@ CREATE TABLE IF NOT EXISTS test_drives (
 
 CREATE TABLE IF NOT EXISTS service_appointments (
     appointment_id   VARCHAR(20) PRIMARY KEY,
-    car_id           VARCHAR(100) NOT NULL,
+    car_id           VARCHAR(20),
     mechanic_id      VARCHAR(20),
     appointment_date VARCHAR(20),
     description      TEXT,
     cost             DECIMAL(10, 2) DEFAULT 0,
-    status           VARCHAR(50) DEFAULT 'Programat'
+    status           VARCHAR(50) DEFAULT 'Programat',
+    FOREIGN KEY (car_id)      REFERENCES cars(car_id),
+    FOREIGN KEY (mechanic_id) REFERENCES employees(employee_code)
 );
 
 --DROP TABLE IF EXISTS service_appointments, test_drives, sale_orders, employees, customers, cars;
