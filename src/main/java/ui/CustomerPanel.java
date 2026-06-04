@@ -37,8 +37,6 @@ public class CustomerPanel {
     private DatePicker svcDatePicker;
     private TextField tfSvcDescription;
 
-    private int webCounter = 1;
-    private int tdCounter = 1;
 
     public CustomerPanel(DealershipService service) {
         this.service = service;
@@ -230,7 +228,7 @@ public class CustomerPanel {
             return;
         }
 
-        String custId = "WEB" + String.format("%03d", webCounter++);
+        String custId = service.generateCustomerId();
         Customer customer = new Customer(custId, tfFirst.getText().trim(), tfLast.getText().trim(),
                 tfPhone.getText().trim(), tfEmail.getText().trim(), tfAddress.getText().trim());
         service.addCustomer(customer);
@@ -259,7 +257,7 @@ public class CustomerPanel {
             return;
         }
 
-        String custId = "TD" + String.format("%03d", tdCounter++);
+        String custId = service.generateCustomerId();
         service.addCustomer(new Customer(custId, tfTdFirst.getText().trim(), tfTdLast.getText().trim(),
                 tfTdPhone.getText().trim(), "", ""));
 

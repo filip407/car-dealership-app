@@ -28,7 +28,6 @@ public class SaleOrder {
     public String getDate() { return date; }
 
     public double getFinalPrice() { return finalPrice; }
-    public void setFinalPrice(double finalPrice) { this.finalPrice = finalPrice; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

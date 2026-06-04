@@ -2,6 +2,7 @@ package service;
 
 import exception.CarNotAvailableException;
 import exception.CustomerNotFoundException;
+import interfaces.Displayable;
 import model.*;
 
 import java.util.*;
@@ -70,10 +71,6 @@ public class DealershipService {
         for (ServiceAppointment sa : serviceAppDb.findAll()) {
             serviceAppointments.add(sa);
         }
-    }
-
-    public boolean isDbAvailable() {
-        return dbAvailable;
     }
 
     public void addCar(AudiCar car) {
@@ -159,24 +156,6 @@ public class DealershipService {
         return result;
     }
 
-    public List<AudiCar> searchByPriceRange(double minPrice, double maxPrice) {
-        audit.log("SEARCH_BY_PRICE_RANGE");
-        List<AudiCar> result = new ArrayList<>();
-        for (AudiCar car : inventory) {
-            if (car.getPrice() >= minPrice && car.getPrice() <= maxPrice) result.add(car);
-        }
-        return result;
-    }
-
-    public List<AudiCar> getCarsByYear(int year) {
-        audit.log("SEARCH_BY_YEAR");
-        List<AudiCar> result = new ArrayList<>();
-        for (AudiCar car : inventory) {
-            if (car.getYear() == year) result.add(car);
-        }
-        return result;
-    }
-
     public TreeSet<AudiCar> getInventory() {
         return inventory;
     }
@@ -189,10 +168,6 @@ public class DealershipService {
         customers.put(customer.getId(), customer);
         if (dbAvailable) customerDb.save(customer);
         audit.log("ADD_CUSTOMER");
-    }
-
-    public Customer getCustomerById(String customerId) {
-        return customers.get(customerId);
     }
 
     public Collection<Customer> getAllCustomers() {
@@ -249,6 +224,12 @@ public class DealershipService {
         return String.format("M%03d", n);
     }
 
+    public String generateCustomerId() {
+        int n = 1;
+        while (customers.containsKey(String.format("CLI%03d", n))) n++;
+        return String.format("CLI%03d", n);
+    }
+
     public SaleOrder createOrder(String customerId, String carId,
                                  String salespersonEmployeeId, String date)
             throws CustomerNotFoundException, CarNotAvailableException {
@@ -260,14 +241,20 @@ public class DealershipService {
         if (car == null || !car.isAvailable()) throw new CarNotAvailableException(carId);
 
         String orderId = "ORD" + String.format("%03d", orders.size() + 1);
-        SaleOrder order = new SaleOrder(orderId, customerId, carId,
-                salespersonEmployeeId, date, car.getPrice());
+        SaleOrder order = new SaleOrder.Builder()
+                .orderId(orderId)
+                .customerId(customerId)
+                .carId(carId)
+                .salespersonId(salespersonEmployeeId)
+                .date(date)
+                .finalPrice(car.getPrice())
+                .status("In asteptare")
+                .build();
 
         car.setAvailable(false);
         car.setCarStatus("IN ASTEPTARE");
         customer.addOrderId(orderId);
         orders.add(order);
-        order.setStatus("In asteptare");
 
         if (dbAvailable) {
             carDb.update(car);
@@ -299,6 +286,9 @@ public class DealershipService {
     public boolean cancelOrder(String orderId) {
         for (SaleOrder order : orders) {
             if (order.getOrderId().equals(orderId)) {
+                if ("Confirmata".equals(order.getStatus()) || "Anulata".equals(order.getStatus())) {
+                    return false;
+                }
                 order.setStatus("Anulata");
                 AudiCar car = findCarById(order.getCarId());
                 if (car != null) {
@@ -416,14 +406,6 @@ public class DealershipService {
         return false;
     }
 
-    public List<ServiceAppointment> getServiceAppointmentsByMechanic(String mechanicId) {
-        List<ServiceAppointment> result = new ArrayList<>();
-        for (ServiceAppointment sa : serviceAppointments) {
-            if (mechanicId.equals(sa.getMechanicId())) result.add(sa);
-        }
-        return result;
-    }
-
     public List<ServiceAppointment> getAllServiceAppointments() {
         return serviceAppointments;
     }
@@ -452,12 +434,7 @@ public class DealershipService {
 
     public void printInventory() {
         System.out.println("\n=== STOC COMPLET (sortat dupa pret) ===");
-        for (AudiCar car : inventory) System.out.println("  " + car.getCarDetails());
-    }
-
-    public void printAllOrders() {
-        System.out.println("\n=== TOATE COMENZILE ===");
-        for (SaleOrder order : orders) System.out.println("  " + order);
+        for (Displayable item : inventory) System.out.println("  " + item.getDisplayInfo());
     }
 
     private AudiCar findCarById(String carId) {

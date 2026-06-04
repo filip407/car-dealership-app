@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import model.AudiCar;
 import model.TestDrive;
 import service.DealershipService;
 
@@ -33,7 +34,7 @@ public class TestDrivePanel {
                     setGraphic(null);
                     return;
                 }
-                model.AudiCar car = service.getCarById(td.getCarId());
+                AudiCar car = service.getCarById(td.getCarId());
                 String carName = car != null ? car.getModel() + " (" + td.getCarId() + ")" : td.getCarId();
                 Label top = new Label(td.getDate() + "  la ora  " + td.getTime() + "   |   " + carName);
                 top.getStyleClass().add("cell-title");

@@ -16,6 +16,7 @@ public class DatabaseConnection {
         try {
             Properties props = new Properties();
             InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties");
+            if (input == null) throw new IOException("db.properties nu a fost gasit");
             props.load(input);
             String url = props.getProperty("db.url");
             String user = props.getProperty("db.user");

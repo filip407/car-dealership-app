@@ -1,9 +1,11 @@
 import exception.CarNotAvailableException;
 import exception.CustomerNotFoundException;
 import factory.CarFactory;
+import interfaces.Displayable;
 import model.*;
 import service.DealershipService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -42,6 +44,15 @@ public class Main {
         System.out.println("  Angajati (ArrayList): " + service.getAllEmployees().size());
         System.out.println("  Clienti   (HashMap) : " + service.getAllCustomers().size());
         System.out.println("  Comenzi   (ArrayList): " + service.getAllOrders().size());
+
+        System.out.println("\n[Interfata Displayable] Polimorfism prin interfata - obiecte de tipuri diferite:");
+        List<Displayable> displayables = new ArrayList<>();
+        displayables.add(standard);   // AudiCar  -> Car implements Displayable
+        displayables.add(electric);   // ElectricAudiCar -> AudiCar -> Car implements Displayable
+        displayables.add(new Customer("DEMO_CLI", "Test", "Client", "0700000000", "test@demo.ro", "Str. Demo 1"));
+        for (Displayable d : displayables) {
+            System.out.println("  " + d.getDisplayInfo());
+        }
 
         System.out.println("\n[Mostenire + Interfata Displayable] Inventar complet (sortat dupa pret):");
         service.printInventory();

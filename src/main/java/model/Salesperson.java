@@ -11,11 +11,6 @@ public class Salesperson extends Employee {
     }
 
     public double getCommissionRate() { return commissionRate; }
-    public void setCommissionRate(double commissionRate) { this.commissionRate = commissionRate; }
-
-    public double calculateCommission(double salePrice) {
-        return salePrice * (commissionRate / 100.0);
-    }
 
     @Override
     public String getRole() { return "Vanzator"; }

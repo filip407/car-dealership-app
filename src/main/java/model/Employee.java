@@ -17,7 +17,6 @@ public abstract class Employee extends Person {
     public String getEmployeeId() { return employeeId; }
 
     public double getSalary() { return salary; }
-    public void setSalary(double salary) { this.salary = salary; }
 
     public String getHireDate() { return hireDate; }
 

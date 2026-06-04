@@ -11,7 +11,6 @@ public class Mechanic extends Employee {
     }
 
     public String getSpecialization() { return specialization; }
-    public void setSpecialization(String specialization) { this.specialization = specialization; }
 
     @Override
     public String getRole() { return "Mecanic"; }

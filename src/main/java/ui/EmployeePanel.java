@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
+import model.AudiCar;
 import model.SaleOrder;
 import service.DealershipService;
 
@@ -67,7 +68,7 @@ public class EmployeePanel {
             protected void updateItem(SaleOrder order, boolean empty) {
                 super.updateItem(order, empty);
                 if (empty || order == null) { setText(null); setGraphic(null); return; }
-                model.AudiCar car = service.getCarById(order.getCarId());
+                AudiCar car = service.getCarById(order.getCarId());
                 String carName = car != null ? car.getModel() + " (" + order.getCarId() + ")" : order.getCarId();
                 Label top = new Label(carName + "   |   Client: " + order.getCustomerId() + "   |   " + order.getDate());
                 top.getStyleClass().add("cell-title");
@@ -97,6 +98,14 @@ public class EmployeePanel {
         cancel.setOnAction(e -> {
             SaleOrder sel = list.getSelectionModel().getSelectedItem();
             if (sel == null) { showError("Selecteaza o comanda din lista."); return; }
+            if ("Confirmata".equals(sel.getStatus())) {
+                showError("Comenzile confirmate nu pot fi anulate.");
+                return;
+            }
+            if ("Anulata".equals(sel.getStatus())) {
+                showError("Comanda este deja anulata.");
+                return;
+            }
             service.cancelOrder(sel.getOrderId());
             refreshOrders();
             catalogPanel.refresh();
@@ -140,7 +149,7 @@ public class EmployeePanel {
         int total = service.getInventory().size();
         int available = service.getAvailableCars().size();
         int sold = 0;
-        for (model.AudiCar car : service.getInventory()) {
+        for (AudiCar car : service.getInventory()) {
             if ("VANDUTA".equals(car.getCarStatus())) sold++;
         }
         int ordersCount = service.getAllOrders().size();

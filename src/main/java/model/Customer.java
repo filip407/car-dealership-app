@@ -15,7 +15,6 @@ public class Customer extends Person {
     }
 
     public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
 
     public void addOrderId(String orderId) { orderIds.add(orderId); }
     public ArrayList<String> getOrderIds() { return orderIds; }

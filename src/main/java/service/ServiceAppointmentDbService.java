@@ -5,7 +5,6 @@ import database.GenericDAO;
 import model.ServiceAppointment;
 
 import java.sql.*;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
