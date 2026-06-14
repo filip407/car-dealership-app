@@ -47,8 +47,8 @@ public class Main {
 
         System.out.println("\n[Interfata Displayable] Polimorfism prin interfata - obiecte de tipuri diferite:");
         List<Displayable> displayables = new ArrayList<>();
-        displayables.add(standard);   // AudiCar  -> Car implements Displayable
-        displayables.add(electric);   // ElectricAudiCar -> AudiCar -> Car implements Displayable
+        displayables.add(standard);
+        displayables.add(electric);
         displayables.add(new Customer("DEMO_CLI", "Test", "Client", "0700000000", "test@demo.ro", "Str. Demo 1"));
         for (Displayable d : displayables) {
             System.out.println("  " + d.getDisplayInfo());

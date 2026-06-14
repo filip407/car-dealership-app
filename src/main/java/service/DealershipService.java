@@ -132,7 +132,7 @@ public class DealershipService {
         audit.log("UPDATE_CAR");
     }
 
-    public String generateCarId() {
+    public synchronized String generateCarId() {
         int n = 1;
         while (findCarById(String.format("CAR%03d", n)) != null) n++;
         return String.format("CAR%03d", n);
